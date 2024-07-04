@@ -1,0 +1,81 @@
+task: 'PPO-Lag-Walker'
+group: 'PPO-Lag'
+device: 'cuda'
+verbose: 2
+env:
+  train_config_path: null
+  eval_config_path: null
+  train_env_id: 'WalkerWithAngle-v0'
+  eval_env_id: 'WalkerWithAngle-v0'
+  # eval_env_id_2: 'WalkerWithAngleNoise-v0'
+  noise_type: 'full_random' # random / attack
+  train_noise_mean: 0
+  train_noise_std: 0
+  eval_noise_mean: 0
+  eval_noise_std: 0
+#  eval_noise_mean_2: 0
+#  eval_noise_std_2: 0
+  save_dir: '../save_model'
+  cost_info_str: 'cost'
+  use_cost: True
+  reward_gamma: 0.99
+  cost_gamma: 0.99
+  dont_normalize_obs: False
+  dont_normalize_reward: False
+  dont_normalize_cost: False  # cost
+  record_info_names: ["thigh"]
+  record_info_input_dims: [ 3, ] # the dim of record info in inputs=(obs, action)
+  visualize_info_ranges: [ [ -2, 2 ], ]
+
+running:
+  n_iters: 100
+  n_eval_episodes: 20
+  save_every: 5
+
+PPO:
+  method: 'PPO-Lag'
+  policy_name: 'TwoCriticsMlpPolicy'
+  learning_rate: 0.0003
+#  lam_lr: 0.00001
+#  lam_min: 0
+#  lam_max: 100
+  n_steps: 2048
+  n_epochs: 10
+  reward_gamma: 0.99
+  reward_gae_lambda: 0.95
+  cost_gamma: 0.99
+  cost_gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.0
+  reward_vf_coef: 0.5
+  cost_vf_coef: 0.5
+#  op_coef: 1
+  max_grad_norm: 0.5
+  use_sde: False
+  sde_sample_freq: -1
+  target_kl: 0.01
+  shared_layers: null
+  policy_layers: [64, 64]
+#  op_policy_layers: [64, 64]
+  reward_vf_layers: [64, 64]
+  cost_vf_layers: [64, 64]
+#  lambda_layers: [64, 64]
+  batch_size: 64
+  eval_every: 2048
+  use_curiosity_driven_exploration: False
+  warmup_timesteps: False
+  reset_policy: False
+  forward_timesteps: 200000
+  clip_range_reward_vf: null
+  clip_range_cost_vf: null
+  penalty_initial_value: 1
+  penalty_learning_rate: 0.1
+  budget: 0
+  proportional_control_coeff: 10
+  integral_control_coeff: 0.0001
+  derivative_control_coeff: 0
+  pid_delay: 1
+  proportional_cost_ema_alpha: 0.5
+  derivative_cost_ema_alpha: 0.5
+#  op_strength: 0.1
+#  op_type: 'cost' #cost/reward/both

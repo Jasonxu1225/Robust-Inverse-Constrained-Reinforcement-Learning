@@ -1,0 +1,73 @@
+task: 'Eval-WGW-S2' # save name
+group: 'PI-Lag' # model group
+device: 'cuda'
+verbose: 2
+# you can load difference models here
+model:
+  model_path: '../save_model/Discrete-ICRL-WGW-S2/PI-Lag' # PI-Lag / RDPI / ...
+  iter_msg: 14 # model epoch
+env:
+  # you can change the eval env config here, for example, with different levels of upwinds
+  eval_config_path: '../mujuco_environment/custom_envs/envs/configs/WGW-setting2-upwind0.1.yaml'
+  eval_env_id: 'WindyWGW-v0'
+  save_dir: '../save_model'
+  cost_info_str: 'cost'
+  use_cost: True
+  reward_gamma: 0.99
+  cost_gamma: 0.99  # no cost
+  dont_normalize_obs: True
+  dont_normalize_reward: True
+  dont_normalize_cost: True  # cost
+  record_info_names: ['x_position', 'y_position']
+  record_info_input_dims: [ 1, 0 ]  # height, width
+  visualize_info_ranges: [ [ 0, 6 ], [ 0, 6]  ]  #  [ [ 0, 7 ], [ 0, 7 ]  ]
+
+running:
+  # you can change the eval iterations and episodes per iteration here
+  n_iters: 10
+  n_eval_episodes: 5
+  save_every: 1
+  expert_rollouts: 200
+  sample_rollouts: 50
+  store_sample_num: null
+  use_buffer: True
+  store_by_game: True
+  store_sample_rollouts: 1000
+
+iteration:
+  method: PI-Lag
+  warmup_timesteps: 0
+  stopping_threshold: 0.001
+  max_iter: 5
+  forward_iter: 10
+  penalty_initial_value: 0.1
+  penalty_learning_rate: 0.1
+  gamma: 0.7
+  reset_policy: False
+  reset_every: null
+  nu_max_clamp: 1
+  nu_min_clamp: null
+  roll_sample: 1
+  op_strength: 0.1
+  cost_threshold: 0
+
+CN:
+  cn_learning_rate: 0.001
+  cn_reg_coeff: 0
+  cn_layers: [64, 64, 64]
+  cn_batch_size: null
+  cn_obs_select_name: null  # null means all
+  cn_acs_select_name: [-1]  # [-1] means none
+  no_importance_sampling: False
+  per_step_importance_sampling: False
+  clip_obs: 20
+  cn_normalize: False
+  cn_target_kl_old_new: 10
+  cn_target_kl_new_old: 10
+  train_gail_lambda: False
+  cn_eps: 0.00001
+  backward_iters: 20
+  anneal_clr_by_factor: 1.0
+  recon_obs: True
+  cost_net_type: 'matrix' # network / matrix
+  regularize_all: False

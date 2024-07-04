@@ -1,0 +1,26 @@
+task: 'Eval-Ant-final'
+group: 'PPO-Lag'
+device: 'cuda'
+verbose: 2
+env:
+  eval_config_path: null
+  eval_env_id: 'AntWall-v0'
+  noise_type: 'full_random' # you can change the noise type: full_random / partial_random / attack
+  eval_noise_mean: 0
+  eval_noise_std: 0.01 # you can change the noise strength: e.g., 0.01, 0.05, and 0.1
+  save_dir: '../save_model'
+  cost_info_str: 'cost'
+  use_cost: True
+  reward_gamma: 0.99
+  cost_gamma: 0.99  # no cost
+  dont_normalize_obs: False
+  dont_normalize_reward: False
+  dont_normalize_cost: False  # cost
+  record_info_names: ["x_position"]
+  record_info_input_dims: [0] # the dim of record info in inputs=(obs, action)
+  visualize_info_ranges: [[-30, 30]]
+
+running:
+  n_iters: 1
+  n_eval_episodes: 50
+  save_every: 1
